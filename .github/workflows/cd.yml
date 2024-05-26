@@ -1,0 +1,25 @@
+name: cd
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ v-* ]
+
+jobs:
+  cd:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Create dotenv
+        run: |
+          echo $'${{ secrets.DOTENV }}' > ./src/.env
+      - name: Build Lambda
+        run: sam build --use-container
+      - name: Deploy Lambda
+        run: sam deploy --stack-name ${{ secrets.STACK_NAME }}
