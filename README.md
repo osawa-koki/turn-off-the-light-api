@@ -2,6 +2,8 @@
 
 🍾🍾🍾 ライトを消すためのAPIを実装する！  
 
+SwitchBotのAPIを使って、Siriなどからライトを消すことができるようにする！  
+
 ## 環境構築
 
 最初にAWS CLIをインストールします。  
@@ -58,6 +60,7 @@ sam local start-api
 | AWS_ACCESS_KEY_ID | AWSのアクセスキーID |
 | AWS_SECRET_ACCESS_KEY | AWSのシークレットアクセスキー |
 | AWS_REGION | リージョン名 |
+| DOTENV | `./src/.env`の内容 |
 
 ### デプロイ
 
@@ -83,6 +86,7 @@ aws cloudformation describe-stacks --stack-name turn-off-the-light-api --query '
 ```
 
 エンドポイントを取得するためには以下のコマンドを実行します。  
+当エンドポイントに対してPOSTリクエストを送信することで、ライトを消すことができます。  
 
 ```shell
 aws cloudformation describe-stacks --stack-name <スタック名> --query 'Stacks[].Outputs[?OutputKey==`LambdaApi`].OutputValue' --output text
