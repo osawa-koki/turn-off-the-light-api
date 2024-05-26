@@ -1,0 +1,57 @@
+name: ci
+
+on: [ push ]
+
+env:
+  source-directory: ./src/
+
+jobs:
+  node-ci:
+    defaults:
+      run:
+        working-directory: ${{ env.source-directory }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [ 20.x ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache node_modules
+        id: node_modules_cache_id
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.source-directory }}node_modules
+          key: node-modules-${{ matrix.node-version }}-${{ hashFiles('./**/yarn.lock') }}
+      - name: Install dependencies
+        if: steps.node_modules_cache_id.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --non-interactive
+      - name: Lint
+        run: yarn lint
+      - name: Type check
+        run: yarn type-check
+      - name: Build
+        run: yarn build:test
+      - name: Test
+        run: yarn test
+  sam-ci:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/setup-sam@v2
+      - name: Validate SAM template
+        run: sam validate
+  intg-ci:
+    runs-on: ubuntu-22.04
+    needs:
+      - node-ci
+      - sam-ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/setup-sam@v2
+      - name: Test integration
+        run: sam build --use-container && sam local invoke --no-event
