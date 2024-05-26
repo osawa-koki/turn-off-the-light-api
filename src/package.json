@@ -6,6 +6,7 @@
   "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
   "author": "SAM CLI",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "esbuild ./app.ts --bundle --platform=node --target=node20 --format=esm --packages=external --outfile=./app.js",
     "build:test:unit": "esbuild ./tests/unit/*.ts --bundle --platform=node --target=node20 --format=esm --packages=external  --outfile=./tests/unit/index.js",
