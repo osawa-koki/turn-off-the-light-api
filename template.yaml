@@ -9,44 +9,44 @@ Description: >
 Globals:
   Function:
     Timeout: 3
-
     Tracing: Active
     # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
     LoggingConfig:
       LogFormat: JSON
   Api:
     TracingEnabled: true
+
 Resources:
-  HelloWorldFunction:
+  LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Sub "${AWS::StackName}-turn-off"
       PackageType: Image
       Architectures:
-      - x86_64
+        - x86_64
       Events:
-        HelloWorld:
+        LambdaFunctionEvent:
           Type: Api
           Properties:
-            Path: /hello
-            Method: get
+            Path: /turn-off/
+            Method: POST
     Metadata:
       DockerTag: nodejs20.x-v1
-      DockerContext: ./hello-world
+      DockerContext: ./src/
       Dockerfile: Dockerfile
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
     Properties:
-      Name:
-        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      Name: !Sub "ApplicationInsights-SAM-${AWS::StackName}"
       ResourceQuery:
         Type: CLOUDFORMATION_STACK_1_0
   ApplicationInsightsMonitoring:
     Type: AWS::ApplicationInsights::Application
     Properties:
-      ResourceGroupName:
-        Ref: ApplicationResourceGroup
-      AutoConfigurationEnabled: 'true'
+      ResourceGroupName: !Ref ApplicationResourceGroup
+      AutoConfigurationEnabled: true
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
