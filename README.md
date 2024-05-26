@@ -82,11 +82,11 @@ aws cloudformation describe-stacks --stack-name <スタック名> --query 'Stack
 aws cloudformation describe-stacks --stack-name turn-off-the-light-api --query 'Stacks[].Outputs'
 ```
 
-Lambda関数を呼び出すには、以下のコマンドを実行してください。  
+エンドポイントを取得するためには以下のコマンドを実行します。  
 
 ```shell
-aws lambda invoke --function-name $(aws cloudformation describe-stacks --stack-name <スタック名> --query 'Stacks[].Outputs[?OutputKey==`PingFunctionName`].OutputValue' --output text) --payload '{}' response.json
+aws cloudformation describe-stacks --stack-name <スタック名> --query 'Stacks[].Outputs[?OutputKey==`LambdaApi`].OutputValue' --output text
 
 # 例)
-aws lambda invoke --function-name $(aws cloudformation describe-stacks --stack-name turn-off-the-light-api --query 'Stacks[].Outputs[?OutputKey==`PingFunctionName`].OutputValue' --output text) --payload '{}' response.json
+aws cloudformation describe-stacks --stack-name turn-off-the-light-api --query 'Stacks[].Outputs[?OutputKey==`LambdaApi`].OutputValue' --output text
 ```

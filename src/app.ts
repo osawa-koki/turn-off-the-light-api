@@ -65,7 +65,7 @@ export const lambdaHandler: APIGatewayProxyHandler = async (): Promise<APIGatewa
     headers: apiHeader,
     body: JSON.stringify(data)
   })
-  console.log(response.json())
+  console.log(await response.json())
 
   return {
     statusCode: 200,
