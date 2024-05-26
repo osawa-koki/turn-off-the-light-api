@@ -16,7 +16,8 @@
     "test": "yarn test:unit && yarn test:intg",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "dev": "node -r esbuild-register ./app.ts"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.137",
@@ -25,13 +26,16 @@
     "axios": ">=1.6.0",
     "dotenv": "^16.4.5",
     "esbuild": "^0.21.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.1.1",
     "@types/chai": "^4.3.14",
     "@types/mocha": "^10.0.6",
+    "@types/uuid": "^9.0.8",
     "chai": "^4.3.6",
+    "esbuild-register": "^3.5.0",
     "eslint": "^9.1.1",
     "globals": "^15.1.0",
     "mocha": "^10.2.0",
