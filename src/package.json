@@ -6,14 +6,35 @@
   "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
   "author": "SAM CLI",
   "license": "MIT",
-  "dependencies": {
-    "axios": ">=1.6.0"
-  },
   "scripts": {
-    "test": "mocha tests/unit/"
+    "build": "esbuild ./app.ts --bundle --platform=node --target=node20 --packages=external --outfile=./app.js",
+    "build:test:unit": "esbuild ./tests/unit/*.ts --bundle --platform=node --target=node20 --packages=external  --outfile=./tests/unit/index.js",
+    "build:test:intg": "esbuild ./tests/intg/*.ts --bundle --platform=node --target=node20 --packages=external  --outfile=./tests/intg/index.js",
+    "build:test": "yarn build:test:unit && yarn build:test:intg",
+    "test:unit": "mocha ./tests/unit/",
+    "test:intg": "mocha ./tests/intg/",
+    "test": "yarn test:unit && yarn test:intg",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.137",
+    "@types/node": "^20.12.8",
+    "aws-lambda": "^1.0.7",
+    "axios": ">=1.6.0",
+    "dotenv": "^16.4.5",
+    "esbuild": "^0.20.2",
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.1.1",
+    "@types/chai": "^4.3.14",
+    "@types/mocha": "^10.0.6",
     "chai": "^4.3.6",
-    "mocha": "^10.2.0"
+    "eslint": "^9.1.1",
+    "globals": "^15.1.0",
+    "mocha": "^10.2.0",
+    "typescript-eslint": "^7.8.0"
   }
 }
