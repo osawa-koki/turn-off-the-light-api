@@ -7,7 +7,7 @@
   "author": "SAM CLI",
   "license": "MIT",
   "scripts": {
-    "build": "esbuild ./app.ts --bundle --platform=node --target=node20 --packages=external --format=esm --outfile=./app.js",
+    "build": "esbuild ./app.ts --bundle --platform=node --target=node20 --format=esm --packages=external --outfile=./app.js",
     "build:test:unit": "esbuild ./tests/unit/*.ts --bundle --platform=node --target=node20 --format=esm --packages=external  --outfile=./tests/unit/index.js",
     "build:test:intg": "esbuild ./tests/intg/*.ts --bundle --platform=node --target=node20 --format=esm --packages=external  --outfile=./tests/intg/index.js",
     "build:test": "yarn build:test:unit && yarn build:test:intg",
